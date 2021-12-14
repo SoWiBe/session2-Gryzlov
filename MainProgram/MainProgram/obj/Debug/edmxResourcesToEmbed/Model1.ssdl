@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище user6Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="agents">
+    <Key>
+      <PropertyRef Name="IDAgent" />
+    </Key>
+    <Property Name="IdType" Type="int" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDAgent" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Email" Type="nvarchar" MaxLength="255" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="255" />
+    <Property Name="Logo" Type="nvarchar" MaxLength="255" />
+    <Property Name="Address" Type="nvarchar" MaxLength="255" />
+    <Property Name="Priority" Type="nvarchar" MaxLength="255" />
+    <Property Name="Director" Type="nvarchar" MaxLength="255" />
+    <Property Name="INN" Type="float" />
+    <Property Name="KPP" Type="float" />
+  </EntityType>
+  <EntityType Name="HistoryPriority">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="oldPriority" Type="nvarchar" MaxLength="50" />
+    <Property Name="newPriority" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="NameProduct" Type="nvarchar" MaxLength="255" />
+    <Property Name="TypeProduct" Type="nvarchar" MaxLength="255" />
+    <Property Name="Articul" Type="float" />
+    <Property Name="CountPeople" Type="float" />
+    <Property Name="NumberAngar" Type="float" />
+    <Property Name="MinPriceForAgent" Type="float" />
+  </EntityType>
+  <EntityType Name="productSale">
+    <Key>
+      <PropertyRef Name="IdSale" />
+    </Key>
+    <Property Name="IdSale" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ID" Type="int" />
+    <Property Name="Продукция" Type="nvarchar" MaxLength="255" />
+    <Property Name="InAgent" Type="int" />
+    <Property Name="Наименование агента" Type="nvarchar" MaxLength="255" />
+    <Property Name="Дата реализации" Type="datetime" />
+    <Property Name="Количество продукции" Type="int" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6013: Первичный ключ в таблице или представлении "user6.dbo.productSale$ExternalData_2" не определен, его не удалось вывести. Эта таблица или представление исключены. Чтобы использовать сущность, необходимо проверить схему, добавить правильные ключи и раскомментировать ее.
+        <EntityType Name="productSale$ExternalData_2">
+          <Property Name="Продукция" Type="nvarchar" MaxLength="255" />
+          <Property Name="InAgent" Type="float" />
+          <Property Name="Наименование агента" Type="nvarchar" MaxLength="255" />
+          <Property Name="Дата реализации" Type="datetime" />
+          <Property Name="Количество продукции" Type="float" />
+        </EntityType>-->
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="type_agents">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "user6.dbo.VW_AgentDetails" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="VW_AgentDetails">
+    <Key>
+      <PropertyRef Name="IDAgent" />
+    </Key>
+    <Property Name="IDAgent" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="255" />
+    <Property Name="Priority" Type="nvarchar" MaxLength="255" />
+    <Property Name="Тип" Type="nvarchar" MaxLength="255" />
+    <Property Name="Скидка" Type="int" />
+    <Property Name="Logo" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <Association Name="FK_agents_type_agents">
+    <End Role="type_agents" Type="Self.type_agents" Multiplicity="1" />
+    <End Role="agents" Type="Self.agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="type_agents">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="agents">
+        <PropertyRef Name="IdType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_productSale_agents">
+    <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
+    <End Role="productSale" Type="Self.productSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="agents">
+        <PropertyRef Name="IDAgent" />
+      </Principal>
+      <Dependent Role="productSale">
+        <PropertyRef Name="InAgent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_productSale_products">
+    <End Role="products" Type="Self.products" Multiplicity="0..1" />
+    <End Role="productSale" Type="Self.productSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="productSale">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="Хранилище user6ModelContainer">
+    <EntitySet Name="agents" EntityType="Self.agents" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HistoryPriority" EntityType="Self.HistoryPriority" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="products" EntityType="Self.products" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="productSale" EntityType="Self.productSale" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="type_agents" EntityType="Self.type_agents" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VW_AgentDetails" EntityType="Self.VW_AgentDetails" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VW_AgentDetails].[IDAgent] AS [IDAgent], 
+    [VW_AgentDetails].[Name] AS [Name], 
+    [VW_AgentDetails].[Phone] AS [Phone], 
+    [VW_AgentDetails].[Priority] AS [Priority], 
+    [VW_AgentDetails].[Тип] AS [Тип], 
+    [VW_AgentDetails].[Скидка] AS [Скидка], 
+    [VW_AgentDetails].[Logo] AS [Logo]
+    FROM [dbo].[VW_AgentDetails] AS [VW_AgentDetails]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_agents_type_agents" Association="Self.FK_agents_type_agents">
+      <End Role="type_agents" EntitySet="type_agents" />
+      <End Role="agents" EntitySet="agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_productSale_agents" Association="Self.FK_productSale_agents">
+      <End Role="agents" EntitySet="agents" />
+      <End Role="productSale" EntitySet="productSale" />
+    </AssociationSet>
+    <AssociationSet Name="FK_productSale_products" Association="Self.FK_productSale_products">
+      <End Role="products" EntitySet="products" />
+      <End Role="productSale" EntitySet="productSale" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

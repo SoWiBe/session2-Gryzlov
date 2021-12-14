@@ -1,0 +1,122 @@
+﻿<Window x:Class="MainProgram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MainProgram"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1200">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Background="#f9969e">
+            <TextBlock FontSize="25" FontFamily="Comic Sans MS"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">Программа</TextBlock>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock FontSize="20" FontFamily="Comic Sans MS" Margin="5">Поиск:</TextBlock>
+                <TextBox x:Name="txtSearch" HorizontalAlignment="Center" VerticalAlignment="Center"
+                     Width="300" Height="35" TextChanged="TxtSearch_TextChanged"></TextBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ComboBox x:Name="cmbSort"
+                          Width="150"
+                          Height="35" SelectionChanged="CmbSort_SelectionChanged"></ComboBox>
+               
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ComboBox x:Name="cmbFilter" DisplayMemberPath="Name"
+                          Width="150"
+                          Height="35" SelectionChanged="CmbFilter_SelectionChanged"></ComboBox>
+
+            </StackPanel>
+
+            <Button x:Name="btnResetFilters" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="40" Background="#43dcfe"
+                    FontSize="16" FontFamily="Comic Sans MS" Grid.Column="4" Click="BtnResetFilters_Click">Сбросить фильтры</Button>
+        </Grid> 
+        <ListView x:Name="MainListView" Grid.Row="2">
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="800" Height="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Image Stretch="Uniform" Margin="5" Width="75" Height="75"  HorizontalAlignment="Left">
+                            <Image.Source>
+                                <Binding Path="NewLogo">
+                                    <Binding.TargetNullValue>
+                                        C:\Users\Administrator\Desktop\ДЭ-1 ПОТОК v2\2 сессия\MainProgram\MainProgram\Resources\picture.png
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock FontSize="15" Text="{Binding Path=Тип}"/>
+                                <TextBlock FontSize="15" Text=" | "/>
+                                <TextBlock FontSize="15" Text="{Binding Path=Name}"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" FontSize="15" Text="10 продаж за год"></TextBlock>
+                            <TextBlock Grid.Row="2" FontSize="15" Text="{Binding Path=Phone}"></TextBlock>
+                            <TextBlock Grid.Row="3" FontSize="15" Text="{Binding Path=Priority}"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Column="2" HorizontalAlignment="Right">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="15" Text="{Binding Path=НоваяСкидка}"></TextBlock>
+                                <TextBlock FontSize="15" Text="%"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid Grid.Row="3">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Text="назад"
+                           x:Name="txtGoToBack"
+                           Foreground="#43dcfe"
+                           MouseDown="TxtGoToBack_MouseDown"></TextBlock>
+                <TextBlock FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Text="вперед"
+                           MouseDown="TxtGoForward_MouseDown"
+                               Foreground="#43dcfe"
+                           x:Name="txtGoForward"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnAdd" HorizontalAlignment="Center" Width="300" Height="40" Background="#43dcfe"
+                    FontSize="16" FontFamily="Comic Sans MS" Click="BtnAdd_Click">Добавить агента</Button>
+            <Button x:Name="btnEdit" HorizontalAlignment="Center" Width="300" Height="40" Background="#43dcfe"
+                    FontSize="16" FontFamily="Comic Sans MS" Grid.Column="1" Click="BtnEdit_Click">Редактировать агента</Button>
+            <Button x:Name="btnDelete" HorizontalAlignment="Center" Width="300" Height="40" Background="#43dcfe"
+                    FontSize="16" FontFamily="Comic Sans MS" Grid.Column="2" Click="BtnDelete_Click">Удалить агента</Button>
+        </Grid>
+    </Grid>
+</Window>

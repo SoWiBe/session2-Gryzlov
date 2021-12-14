@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="user6Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="agents">
+    <Key>
+      <PropertyRef Name="IDAgent" />
+    </Key>
+    <Property Name="IdType" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="IDAgent" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Logo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Priority" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Director" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="INN" Type="Double" />
+    <Property Name="KPP" Type="Double" />
+    <NavigationProperty Name="type_agents" Relationship="Self.FK_agents_type_agents" FromRole="agents" ToRole="type_agents" />
+    <NavigationProperty Name="productSale" Relationship="Self.FK_productSale_agents" FromRole="agents" ToRole="productSale" />
+  </EntityType>
+  <EntityType Name="HistoryPriority">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="oldPriority" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="newPriority" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="NameProduct" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="TypeProduct" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Articul" Type="Double" />
+    <Property Name="CountPeople" Type="Double" />
+    <Property Name="NumberAngar" Type="Double" />
+    <Property Name="MinPriceForAgent" Type="Double" />
+    <NavigationProperty Name="productSale" Relationship="Self.FK_productSale_products" FromRole="products" ToRole="productSale" />
+  </EntityType>
+  <EntityType Name="productSale">
+    <Key>
+      <PropertyRef Name="IdSale" />
+    </Key>
+    <Property Name="IdSale" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ID" Type="Int32" />
+    <Property Name="Продукция" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="InAgent" Type="Int32" />
+    <Property Name="Наименование_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Дата_реализации" Type="DateTime" Precision="3" />
+    <Property Name="Количество_продукции" Type="Int32" />
+    <NavigationProperty Name="agents" Relationship="Self.FK_productSale_agents" FromRole="productSale" ToRole="agents" />
+    <NavigationProperty Name="products" Relationship="Self.FK_productSale_products" FromRole="productSale" ToRole="products" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="type_agents">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="agents" Relationship="Self.FK_agents_type_agents" FromRole="type_agents" ToRole="agents" />
+  </EntityType>
+  <EntityType Name="VW_AgentDetails">
+    <Key>
+      <PropertyRef Name="IDAgent" />
+    </Key>
+    <Property Name="IDAgent" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Priority" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Тип" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Скидка" Type="Int32" />
+    <Property Name="Logo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_agents_type_agents">
+    <End Role="type_agents" Type="Self.type_agents" Multiplicity="1" />
+    <End Role="agents" Type="Self.agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="type_agents">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="agents">
+        <PropertyRef Name="IdType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_productSale_agents">
+    <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
+    <End Role="productSale" Type="Self.productSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="agents">
+        <PropertyRef Name="IDAgent" />
+      </Principal>
+      <Dependent Role="productSale">
+        <PropertyRef Name="InAgent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_productSale_products">
+    <End Role="products" Type="Self.products" Multiplicity="0..1" />
+    <End Role="productSale" Type="Self.productSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="productSale">
+        <PropertyRef Name="ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="user6Entities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="agents" EntityType="Self.agents" />
+    <EntitySet Name="HistoryPriority" EntityType="Self.HistoryPriority" />
+    <EntitySet Name="products" EntityType="Self.products" />
+    <EntitySet Name="productSale" EntityType="Self.productSale" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="type_agents" EntityType="Self.type_agents" />
+    <EntitySet Name="VW_AgentDetails" EntityType="Self.VW_AgentDetails" />
+    <AssociationSet Name="FK_agents_type_agents" Association="Self.FK_agents_type_agents">
+      <End Role="type_agents" EntitySet="type_agents" />
+      <End Role="agents" EntitySet="agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_productSale_agents" Association="Self.FK_productSale_agents">
+      <End Role="agents" EntitySet="agents" />
+      <End Role="productSale" EntitySet="productSale" />
+    </AssociationSet>
+    <AssociationSet Name="FK_productSale_products" Association="Self.FK_productSale_products">
+      <End Role="products" EntitySet="products" />
+      <End Role="productSale" EntitySet="productSale" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(user6Model.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(user6Model.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>
