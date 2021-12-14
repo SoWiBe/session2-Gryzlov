@@ -19,7 +19,7 @@ namespace MainProgram
         {
             get
             {
-                if(Скидка < 5)
+                if(Convert.ToInt32(НоваяСкидка) <= 5)
                 {
                     return false;
                 }
