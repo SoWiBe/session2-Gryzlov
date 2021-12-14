@@ -23,6 +23,7 @@ namespace MainProgram
     {
         private List<string> sortList = new List<string>();
         private IEnumerable<VW_AgentDetails> agentsSort;
+        private IEnumerable<VW_AgentDetails> agentsSearch;
         public int takeNumber = 10;
         public int skipNumber = 0;
         public int maxElements;
@@ -33,6 +34,7 @@ namespace MainProgram
             
             try
             {
+                sortList.Add("Все типы");
                 sortList.Add("Наименование (взрст)");
                 sortList.Add("Наименование (уб)");
                 sortList.Add("Размер скидки (взрст)");
@@ -55,13 +57,14 @@ namespace MainProgram
 
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            
             if(txtSearch.Text != "")
             {
-                agentsSort = agentsMain.ToList().Where(x => x.Name.ToLower().Contains(txtSearch.Text.ToLower()) || x.Phone.Contains(txtSearch.Text));
-                MainListView.ItemsSource = agentsSort;
+                agentsSearch = agentsSort.ToList().Where(x => x.Name.ToLower().Contains(txtSearch.Text.ToLower()) || x.Phone.Contains(txtSearch.Text));
+                MainListView.ItemsSource = agentsSearch;
             } else
             {
-                MainListView.ItemsSource = user6Entities2.GetContext().VW_AgentDetails.ToList();
+                MainListView.ItemsSource = agentsSort;
             }
             
         }
@@ -70,7 +73,7 @@ namespace MainProgram
             switch (cmbFilter.SelectedIndex)
             {
                 case 0:
-                    agentsSort = agentsSort.ToList().Where(x => x.Тип == "ЗАО");
+                    agentsSort = agentsMain.ToList().Where(x => x.Тип == "ЗАО");
                     break;
                 case 1:
                     agentsSort = agentsMain.ToList().Where(x => x.Тип == "МКК");
@@ -88,6 +91,7 @@ namespace MainProgram
                     agentsSort = agentsMain.ToList().Where(x => x.Тип == "ПАО");
                     break;
             }
+            
             MainListView.ItemsSource = agentsSort;
         }
 
@@ -96,23 +100,28 @@ namespace MainProgram
             switch (cmbSort.SelectedIndex)
             {
                 case 0:
-                    agentsSort = agentsSort.ToList().OrderBy(x => x.Name);
+                    agentsSort = agentsMain;
                     break;
                 case 1:
-                    agentsSort = agentsMain.ToList().OrderByDescending(x => x.Name);
+                    agentsSort = agentsMain.ToList().OrderBy(x => x.Name);
                     break;
                 case 2:
-                    agentsSort = agentsMain.ToList().OrderBy(x => x.Скидка);
+                    agentsSort = agentsMain.ToList().OrderByDescending(x => x.Name);
                     break;
                 case 3:
-                    agentsSort = agentsMain.ToList().OrderByDescending(x => x.Скидка);
+                    agentsSort = agentsMain.ToList().OrderBy(x => x.Скидка);
                     break;
                 case 4:
-                    agentsSort = agentsMain.ToList().OrderBy(x => x.Priority);
+                    agentsSort = agentsMain.ToList().OrderByDescending(x => x.Скидка);
                     break;
                 case 5:
+                    agentsSort = agentsMain.ToList().OrderBy(x => x.Priority);
+                    break;
+                case 6:
                     agentsSort = agentsMain.ToList().OrderByDescending(x => x.Priority);
                     break;
+                
+
             }
             MainListView.ItemsSource = agentsSort;
         }
@@ -148,6 +157,11 @@ namespace MainProgram
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
+            if(MainListView.SelectedItem == null)
+            {
+                MessageBox.Show("Выберите агента!!!");
+                return;
+            }
             VW_AgentDetails one = MainListView.SelectedItem as VW_AgentDetails;
             agents agent = user6Entities2.GetContext().agents.ToList().Where(x => x.IDAgent == one.IDAgent).ToList().First();
             AddAgents addAgents = new AddAgents(agent);

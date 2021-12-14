@@ -16,6 +16,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Background="#f9969e">
+            <Image HorizontalAlignment="Left" Margin="10" Width="40" Height="40" Stretch="UniformToFill"
+                Source="C:\Users\Administrator\Desktop\ДЭ-1 ПОТОК v2\2 сессия\MainProgram\MainProgram\Resources\Попрыженок.ico"
+                ></Image>
             <TextBlock FontSize="25" FontFamily="Comic Sans MS"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center">Программа</TextBlock>
